@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   output: 'standalone',
   webpack(config) {
     config.module.rules.push({
@@ -10,8 +9,6 @@ const nextConfig = {
     });
     return config;
   },
-  // AppDir is now standard in Next.js 13+ 
-  serverComponentsExternalPackages: ['@prisma/client'],
   // No longer need rewrites as we've migrated to native Next.js API routes
   async headers() {
     return [
