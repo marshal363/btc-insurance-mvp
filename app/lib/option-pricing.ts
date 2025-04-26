@@ -1,4 +1,4 @@
-import { OptionParameters } from './types';
+import { OptionParameters, SimulationPoint } from './types';
 
 /**
  * Standard normal cumulative distribution function

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { BitcoinPriceCard } from '../client/src/components/bitcoin-price-card';
 import { PremiumCalculatorTabs } from '../client/src/components/premium-calculator-tabs';

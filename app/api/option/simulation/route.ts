@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { generateSimulationPoints } from '@/lib/option-pricing';
-import { OptionParameters } from '@/lib/types';
+import { generateSimulationPoints } from '../../../lib/option-pricing';
+import { OptionParameters } from '../../../lib/types';
 
 export async function POST(request: Request) {
   try {

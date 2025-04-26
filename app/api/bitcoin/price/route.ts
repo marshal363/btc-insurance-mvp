@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getBitcoinPriceData } from '../../lib/bitcoin-api';
+import { getBitcoinPriceData } from '../../../lib/bitcoin-api';
 
 export async function GET() {
   try {
