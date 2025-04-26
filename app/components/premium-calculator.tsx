@@ -109,23 +109,23 @@ export const PremiumCalculator = ({
   return (
     <div className="p-4 sm:p-6">
       {/* Mobile tab navigation */}
-      <div className="md:hidden mb-6 border-b">
-        <div className="flex w-full">
+      <div className="md:hidden mb-6">
+        <div className="flex w-full p-1 bg-gray-100 rounded-full">
           <button
-            className={`flex-1 text-center py-3 px-2 text-sm font-medium border-b-2 transition-colors ${
+            className={`flex-1 text-center py-2.5 px-4 text-sm font-medium rounded-full transition-all ${
               mobileView === "inputs" 
-                ? "border-primary text-primary" 
-                : "border-transparent text-muted-foreground hover:text-foreground hover:border-gray-200"
+                ? "bg-white text-blue-600 shadow-sm" 
+                : "text-gray-600 hover:text-gray-800"
             }`}
             onClick={() => setMobileView("inputs")}
           >
             Parameters
           </button>
           <button
-            className={`flex-1 text-center py-3 px-2 text-sm font-medium border-b-2 transition-colors ${
+            className={`flex-1 text-center py-2.5 px-4 text-sm font-medium rounded-full transition-all ${
               mobileView === "results" 
-                ? "border-primary text-primary" 
-                : "border-transparent text-muted-foreground hover:text-foreground hover:border-gray-200"
+                ? "bg-white text-blue-600 shadow-sm" 
+                : "text-gray-600 hover:text-gray-800"
             }`}
             onClick={() => setMobileView("results")}
           >

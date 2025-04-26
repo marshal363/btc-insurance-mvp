@@ -70,7 +70,7 @@ export const PremiumResult = ({
   return (
     <div className="space-y-6">
       {/* Premium Estimate Card */}
-      <div className="overflow-hidden bg-gradient-to-br from-primary to-primary-700 text-white rounded-xl shadow-sm">
+      <div className="overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800 text-white rounded-xl shadow-lg">
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-semibold text-lg flex items-center">
@@ -159,11 +159,11 @@ export const PremiumResult = ({
           </div>
           
           <div className="mt-6">
-            <Button className="w-full bg-white text-primary hover:bg-white/90 font-semibold text-base h-12">
+            <Button className="w-full bg-white text-blue-600 hover:bg-white/90 font-semibold text-base h-12 rounded-full shadow-md">
               {type === "buyer" 
                 ? (
                   <div className="flex items-center">
-                    <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                     <span>Get Bitcoin Protection</span>
@@ -171,7 +171,7 @@ export const PremiumResult = ({
                 ) 
                 : (
                   <div className="flex items-center">
-                    <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span>Provide Liquidity</span>
@@ -182,19 +182,19 @@ export const PremiumResult = ({
         </div>
       </div>
 
-      {/* Protection Simulation Card - Placeholder for now */}
-      <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+      {/* Protection Simulation Card */}
+      <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-medium text-base flex items-center">
-              <div className="bg-primary/10 p-1.5 rounded-full mr-2">
-                <svg className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="bg-blue-100 p-1.5 rounded-full mr-2">
+                <svg className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
               {type === "buyer" ? "Protection Visualization" : "Risk Analysis"}
             </h3>
-            <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full font-medium">
+            <span className="text-xs px-2 py-1 bg-blue-50 text-blue-600 rounded-full font-medium border border-blue-100">
               BTC Price Scenarios
             </span>
           </div>
@@ -232,8 +232,8 @@ export const PremiumResult = ({
           </div>
           
           <div className="mt-4 grid grid-cols-3 gap-3">
-            <div className="bg-gray-50 rounded-lg p-3">
-              <div className="text-xs text-muted-foreground mb-1">
+            <div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
+              <div className="text-xs text-blue-600 mb-1 font-medium">
                 {type === "buyer" ? "Protection Trigger" : "Obligation Level"}
               </div>
               {isLoading ? (
@@ -245,8 +245,8 @@ export const PremiumResult = ({
               )}
             </div>
             
-            <div className="bg-gray-50 rounded-lg p-3">
-              <div className="text-xs text-muted-foreground mb-1">
+            <div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
+              <div className="text-xs text-blue-600 mb-1 font-medium">
                 {type === "buyer" ? "Max Recovery" : "Max Obligation"}
               </div>
               {isLoading ? (
@@ -258,8 +258,8 @@ export const PremiumResult = ({
               )}
             </div>
             
-            <div className="bg-gray-50 rounded-lg p-3">
-              <div className="text-xs text-muted-foreground mb-1">
+            <div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
+              <div className="text-xs text-blue-600 mb-1 font-medium">
                 {type === "buyer" ? "Break-even" : "Profit Threshold"}
               </div>
               {isLoading ? (

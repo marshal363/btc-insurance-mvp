@@ -33,9 +33,9 @@ function HomeContent() {
 
   return (
     <main className="container mx-auto px-4 py-8 max-w-5xl">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold text-primary">BitHedge Premium Calculator</h1>
-        <p className="text-muted-foreground mt-2">Calculate Bitcoin PUT option premiums using the Black-Scholes model</p>
+      <header className="mb-8 bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl shadow-sm">
+        <h1 className="text-3xl font-bold text-blue-600">BitHedge Premium Calculator</h1>
+        <p className="text-gray-500 mt-2">Calculate Bitcoin PUT option premiums using the Black-Scholes model</p>
       </header>
 
       <BitcoinPriceCard 
@@ -51,6 +51,10 @@ function HomeContent() {
         isLoading={bitcoinPriceQuery.isLoading}
         isError={bitcoinPriceQuery.isError}
       />
+      
+      <footer className="mt-12 pt-6 border-t border-gray-200 text-center text-gray-500 text-sm">
+        <p>© {new Date().getFullYear()} BitHedge • Price data refreshed every 30 seconds • Not financial advice</p>
+      </footer>
     </main>
   );
 }
