@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+// Use relative paths for imports
 import { cn } from '../../lib/utils';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

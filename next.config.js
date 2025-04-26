@@ -10,16 +10,20 @@ const nextConfig = {
     });
     return config;
   },
-  experimental: {
-    appDir: true,
-    serverComponentsExternalPackages: ['@prisma/client'],
-  },
-  async rewrites() {
+  // AppDir is now standard in Next.js 13+ 
+  serverComponentsExternalPackages: ['@prisma/client'],
+  // No longer need rewrites as we've migrated to native Next.js API routes
+  async headers() {
     return [
       {
-        source: '/api/:path*',
-        destination: 'http://localhost:5000/api/:path*'  // Keep using the Express backend API during transition
-      }
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=60, stale-while-revalidate=300",
+          },
+        ],
+      },
     ];
   }
 };

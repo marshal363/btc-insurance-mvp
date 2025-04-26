@@ -1,30 +1,31 @@
 'use client';
 
 import React, { useState } from "react";
+// Import UI components with absolute paths from the app directory
 import { 
   Tooltip, 
   TooltipContent, 
   TooltipProvider, 
   TooltipTrigger 
-} from "./ui/tooltip";
-import { Slider } from "./ui/slider";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Button } from "./ui/button";
+} from "../components/ui/tooltip";
+import { Slider } from "../components/ui/slider";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Button } from "../components/ui/button";
 import { 
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "../components/ui/select";
 import { 
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "./ui/collapsible";
+} from "../components/ui/collapsible";
 import { HelpCircle } from "lucide-react";
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "../components/ui/skeleton";
 
 import { 
   OptionParameters, 
