@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BitcoinPriceCard } from './components/bitcoin-price-card';
-import { PremiumCalculatorTabs } from '../client/src/components/premium-calculator-tabs';
+import { PremiumCalculatorTabs } from './components/premium-calculator-tabs';
 import { CalculatorTab } from './lib/types';
 import { useBitcoinPrice } from './hooks/use-bitcoin-price';
 
