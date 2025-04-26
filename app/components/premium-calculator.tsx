@@ -10,6 +10,8 @@ import {
 } from "../lib/types";
 import { usePremiumCalculation } from "../hooks/use-option-premium";
 import { useSimulationPoints } from "../hooks/use-simulation-points";
+import { ParameterInputs } from "./parameter-inputs";
+import { PremiumResult } from "./premium-result";
 
 interface PremiumCalculatorProps {
   type: CalculatorTab;
@@ -98,40 +100,31 @@ export const PremiumCalculator = ({
     return result;
   };
   
-  // For the initial migration, we'll render a placeholder
-  // This will be replaced later with the actual components
   return (
-    <div className="p-6 bg-white rounded-xl shadow-sm">
-      <h3 className="text-xl font-semibold mb-4">
-        {type === "buyer" ? "Protection Buyer Calculator" : "Liquidity Provider Calculator"}
-      </h3>
-      <p className="text-muted-foreground">
-        The premium calculator is currently being migrated to Next.js. 
-        This is a placeholder that will be replaced with the full component soon.
-      </p>
-      
-      <div className="mt-4 p-4 bg-primary/5 rounded-lg">
-        <h4 className="font-medium mb-2">Current Parameters:</h4>
-        <ul className="text-sm space-y-1">
-          <li><span className="font-medium">Current Price:</span> ${parameters.currentPrice.toFixed(2)}</li>
-          <li><span className="font-medium">Strike Price:</span> ${parameters.strikePrice.toFixed(2)}</li>
-          <li><span className="font-medium">Time Period:</span> {(parameters.timeToExpiry * 365).toFixed(0)} days</li>
-          <li><span className="font-medium">Amount:</span> {parameters.amount} BTC</li>
-          <li><span className="font-medium">Volatility:</span> {parameters.volatility.toFixed(2)}%</li>
-        </ul>
-      </div>
-      
-      {premiumMutation.data && (
-        <div className="mt-4 p-4 bg-success/5 rounded-lg">
-          <h4 className="font-medium mb-2">Calculated Premium:</h4>
-          <p className="text-xl font-bold">
-            {(premiumMutation.data.premium * 1000).toFixed(0)} mBTC
-            <span className="text-sm font-normal ml-2 text-muted-foreground">
-              (${premiumMutation.data.premiumUsd.toFixed(2)})
-            </span>
-          </p>
+    <div className="p-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="col-span-2 space-y-6">
+          <ParameterInputs
+            type={type}
+            parameters={parameters}
+            onParameterChange={handleParameterChange}
+            bitcoinData={bitcoinData}
+            isLoading={isLoading}
+            isError={isError}
+          />
         </div>
-      )}
+        
+        <div className="flex flex-col space-y-6">
+          <PremiumResult
+            type={type}
+            calculationResult={adjustPremiumForType(premiumMutation.data)}
+            parameters={parameters}
+            simulationPoints={simulationMutation.data}
+            isLoading={isLoading || premiumMutation.isPending}
+            isError={isError || premiumMutation.isError}
+          />
+        </div>
+      </div>
     </div>
   );
 };
