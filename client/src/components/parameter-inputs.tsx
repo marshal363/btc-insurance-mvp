@@ -99,11 +99,31 @@ export const ParameterInputs = ({
   };
   
   // Handle time period change
-  const handlePeriodChange = (value: string) => {
+  const handlePeriodChange = async (value: string) => {
     setSelectedPeriod(value);
     const selectedPeriod = timePeriods.find(p => p.id === value);
+    
     if (selectedPeriod) {
+      // Update timeToExpiry
       onParameterChange({ timeToExpiry: selectedPeriod.days / 365 });
+      
+      // Update volatility based on time period
+      try {
+        const days = selectedPeriod.days;
+        
+        // Skip for custom period
+        if (value === "custom") return;
+        
+        // Fetch volatility for the selected time period
+        const response = await fetch(`/api/bitcoin/volatility/${days}`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          onParameterChange({ volatility: data.volatility });
+        }
+      } catch (error) {
+        console.error("Error fetching volatility for period:", error);
+      }
     }
   };
   

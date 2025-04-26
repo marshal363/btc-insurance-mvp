@@ -1,4 +1,11 @@
 // Bitcoin price data types
+export interface ExchangeSource {
+  name: string;
+  price: number;
+  lastUpdated: string;
+  confidence: number;
+}
+
 export interface BitcoinPriceData {
   currentPrice: number;
   lastUpdated: string;
@@ -7,6 +14,8 @@ export interface BitcoinPriceData {
   historicalVolatility: number;
   priceChange24h: number;
   priceChangePercentage24h: number;
+  exchanges?: ExchangeSource[];
+  period?: number;
 }
 
 // Option parameters types

@@ -9,15 +9,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Bitcoin price data route
   app.get("/api/bitcoin/price", async (req, res) => {
     try {
+      // Get time period from query param if provided
+      const days = req.query.days ? parseInt(req.query.days as string) : 30;
+      
       const bitcoinData = await getBitcoinPrice();
       
-      // Get historical volatility
-      const volatility = await calculateHistoricalVolatility();
+      // Get historical volatility for specified time period
+      const volatility = await calculateHistoricalVolatility(days);
       
-      // Return combined data
+      // Return combined data including exchange sources
       res.json({
         ...bitcoinData,
-        historicalVolatility: volatility
+        historicalVolatility: volatility,
+        period: days
       });
     } catch (error) {
       console.error("Error fetching Bitcoin price:", error);
@@ -28,19 +32,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Refresh Bitcoin price data route
   app.get("/api/bitcoin/refresh", async (req, res) => {
     try {
+      // Get time period from query param if provided
+      const days = req.query.days ? parseInt(req.query.days as string) : 30;
+      
       const bitcoinData = await refreshBitcoinPrice();
       
-      // Get historical volatility
-      const volatility = await calculateHistoricalVolatility();
+      // Get historical volatility for specified time period
+      const volatility = await calculateHistoricalVolatility(days);
       
       // Return combined data
       res.json({
         ...bitcoinData,
-        historicalVolatility: volatility
+        historicalVolatility: volatility,
+        period: days
       });
     } catch (error) {
       console.error("Error refreshing Bitcoin price:", error);
       res.status(500).json({ message: "Failed to refresh Bitcoin price data" });
+    }
+  });
+  
+  // Get volatility for specific time period
+  app.get("/api/bitcoin/volatility/:days", async (req, res) => {
+    try {
+      const days = parseInt(req.params.days);
+      
+      if (isNaN(days) || days <= 0) {
+        return res.status(400).json({ message: "Invalid days parameter. Must be a positive number." });
+      }
+      
+      const volatility = await calculateHistoricalVolatility(days);
+      
+      res.json({
+        days,
+        volatility,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error("Error calculating volatility:", error);
+      res.status(500).json({ message: "Failed to calculate volatility" });
     }
   });
   

@@ -43,23 +43,48 @@ export const PremiumResult = ({
       {/* Premium Estimate Card */}
       <Card className="bg-primary-700 text-white rounded-lg">
         <CardContent className="p-6">
-          <h3 className="font-medium text-lg mb-2">
-            {type === "buyer" ? "Premium Estimate" : "Estimated Income"}
+          <h3 className="font-medium text-xl mb-2 flex justify-between items-center">
+            {type === "buyer" ? (
+              <>
+                <span>Premium Cost</span>
+                <span className="text-xs bg-blue-500 text-white px-2 py-1 rounded-full">
+                  Protection Fee
+                </span>
+              </>
+            ) : (
+              <>
+                <span>Estimated Income</span>
+                <span className="text-xs bg-green-500 text-white px-2 py-1 rounded-full">
+                  Liquidity Fee
+                </span>
+              </>
+            )}
           </h3>
-          <div className="text-center my-4">
+          <div className="text-center my-4 border-2 border-white/20 rounded-lg p-4 bg-primary-800">
             {isLoading ? (
               <>
-                <Skeleton className="h-9 w-32 mx-auto bg-primary-600" />
-                <Skeleton className="h-6 w-24 mx-auto mt-1 bg-primary-600" />
+                <Skeleton className="h-10 w-40 mx-auto bg-primary-600" />
+                <Skeleton className="h-6 w-32 mx-auto mt-1 bg-primary-600" />
               </>
             ) : isError ? (
               <div className="text-3xl font-bold">Error</div>
             ) : calculationResult ? (
               <>
-                <span className="text-3xl font-bold">
-                  {formatBTC(calculationResult.premium)}
-                </span>
-                <div className="text-primary-200 mt-1">
+                <div className="flex items-center justify-center gap-2">
+                  {type === "buyer" ? (
+                    <span className="text-xs font-medium bg-red-500/20 text-red-200 px-2 py-1 rounded">
+                      YOU PAY
+                    </span>
+                  ) : (
+                    <span className="text-xs font-medium bg-green-500/20 text-green-200 px-2 py-1 rounded">
+                      YOU RECEIVE
+                    </span>
+                  )}
+                  <span className="text-3xl font-bold">
+                    {formatBTC(calculationResult.premium)}
+                  </span>
+                </div>
+                <div className="text-primary-200 mt-1 font-medium">
                   {formatCurrency(calculationResult.premiumUsd)}
                 </div>
               </>
@@ -67,29 +92,29 @@ export const PremiumResult = ({
               <div className="text-3xl font-bold">--</div>
             )}
           </div>
-          <div className="text-sm mt-4">
-            <div className="flex justify-between">
+          <div className="text-sm mt-4 space-y-3">
+            <div className="flex justify-between items-center bg-primary-800/50 p-2 rounded">
               <span>Premium Rate</span>
               {isLoading ? (
-                <Skeleton className="h-5 w-12 bg-primary-600" />
+                <Skeleton className="h-5 w-16 bg-primary-600" />
               ) : isError ? (
                 <span className="font-medium">Error</span>
               ) : calculationResult ? (
-                <span className="font-medium">
+                <span className="font-medium text-lg">
                   {formatPercentage(calculationResult.premiumRate)}
                 </span>
               ) : (
                 <span className="font-medium">--</span>
               )}
             </div>
-            <div className="flex justify-between mt-1">
+            <div className="flex justify-between items-center bg-primary-800/50 p-2 rounded">
               <span>APY Equivalent</span>
               {isLoading ? (
-                <Skeleton className="h-5 w-12 bg-primary-600" />
+                <Skeleton className="h-5 w-16 bg-primary-600" />
               ) : isError ? (
                 <span className="font-medium">Error</span>
               ) : calculationResult ? (
-                <span className="font-medium">
+                <span className="font-medium text-lg">
                   {formatPercentage(calculationResult.apyEquivalent)}
                 </span>
               ) : (
@@ -98,8 +123,8 @@ export const PremiumResult = ({
             </div>
           </div>
           <div className="mt-6">
-            <Button className="w-full bg-white text-primary-700 hover:bg-primary-50">
-              {type === "buyer" ? "Get Protection" : "Provide Liquidity"}
+            <Button className="w-full bg-white text-primary-700 hover:bg-primary-50 font-bold text-lg py-6">
+              {type === "buyer" ? "Buy Protection Now" : "Provide Liquidity Now"}
             </Button>
           </div>
         </CardContent>
