@@ -22,7 +22,22 @@ export async function generateSimulationPoints(
 }
 
 // Format currency for display
-export function formatCurrency(amount: number, currency: string = "USD"): string {
+export function formatCurrency(amount: number, currency: string = "USD", ios: boolean = false): string {
+  if (ios) {
+    // iOS-style modern currency formatting - cleaner with less symbols
+    const formatted = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+      currencyDisplay: "narrowSymbol",
+    }).format(amount);
+    
+    // For iOS-style UX, we want a clean format without extra decimal places for large numbers
+    return formatted;
+  }
+  
+  // Standard formatting
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
