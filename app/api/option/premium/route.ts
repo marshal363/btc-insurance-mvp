@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { calculateOptionPremium } from '@/lib/option-pricing';
-import { OptionParameters } from '@/lib/types';
+import { calculateOptionPremium } from '../../../lib/option-pricing';
+import { OptionParameters } from '../../../lib/types';
 
 export async function POST(request: Request) {
   try {

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { calculateHistoricalVolatility } from '@/lib/volatility-calculator';
+import { calculateHistoricalVolatility } from '../../../lib/volatility-calculator';
 
 export async function GET(request: Request) {
   try {

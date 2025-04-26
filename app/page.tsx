@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { BitcoinPriceCard } from '../client/src/components/bitcoin-price-card';
 import { PremiumCalculatorTabs } from '../client/src/components/premium-calculator-tabs';
-import { CalculatorTab } from '../client/src/lib/types';
+import { CalculatorTab, BitcoinPriceData } from './lib/types';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -27,12 +27,18 @@ export default function Home() {
 function HomeContent() {
   const [activeTab, setActiveTab] = useState<CalculatorTab>('buyer');
   
-  // We'll use the existing query hooks from the client
-  const bitcoinPriceQuery = {
-    data: undefined,
-    isLoading: true,
-    isError: false
-  };
+  // Fetch Bitcoin price data using React Query
+  const bitcoinPriceQuery = useQuery<BitcoinPriceData>({
+    queryKey: ['bitcoinPrice'],
+    queryFn: async () => {
+      const response = await fetch('/api/bitcoin/price');
+      if (!response.ok) {
+        throw new Error('Failed to fetch Bitcoin price data');
+      }
+      return response.json();
+    },
+    refetchInterval: 60000, // Refresh every minute
+  });
 
   return (
     <main className="container mx-auto px-4 py-8 max-w-5xl">
