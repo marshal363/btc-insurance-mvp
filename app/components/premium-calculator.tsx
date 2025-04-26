@@ -14,6 +14,9 @@ import { ParameterInputs } from "./parameter-inputs";
 import { PremiumResult } from "./premium-result";
 import { CalculationMethod } from "./calculation-method";
 
+// For mobile navigation between parameters and results
+type MobileView = "inputs" | "results";
+
 interface PremiumCalculatorProps {
   type: CalculatorTab;
   bitcoinData?: BitcoinPriceData;
@@ -50,7 +53,9 @@ export const PremiumCalculator = ({
     };
   };
   
+  // State for parameters and mobile view toggle
   const [parameters, setParameters] = useState<OptionParameters>(getDefaultParameters());
+  const [mobileView, setMobileView] = useState<MobileView>("inputs");
   
   // Update parameters when bitcoin data or type changes
   useEffect(() => {
@@ -102,9 +107,38 @@ export const PremiumCalculator = ({
   };
   
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
+      {/* Mobile tab navigation */}
+      <div className="md:hidden mb-6 border-b">
+        <div className="flex w-full">
+          <button
+            className={`flex-1 text-center py-3 px-2 text-sm font-medium border-b-2 transition-colors ${
+              mobileView === "inputs" 
+                ? "border-primary text-primary" 
+                : "border-transparent text-muted-foreground hover:text-foreground hover:border-gray-200"
+            }`}
+            onClick={() => setMobileView("inputs")}
+          >
+            Parameters
+          </button>
+          <button
+            className={`flex-1 text-center py-3 px-2 text-sm font-medium border-b-2 transition-colors ${
+              mobileView === "results" 
+                ? "border-primary text-primary" 
+                : "border-transparent text-muted-foreground hover:text-foreground hover:border-gray-200"
+            }`}
+            onClick={() => setMobileView("results")}
+          >
+            Results
+          </button>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="col-span-2 space-y-6">
+        {/* Parameters section - hidden on mobile when results view is active */}
+        <div 
+          className={`col-span-2 space-y-6 ${mobileView === "results" ? "hidden md:block" : ""}`}
+        >
           <ParameterInputs
             type={type}
             parameters={parameters}
@@ -115,7 +149,10 @@ export const PremiumCalculator = ({
           />
         </div>
         
-        <div className="flex flex-col space-y-6">
+        {/* Results section - hidden on mobile when inputs view is active */}
+        <div 
+          className={`flex flex-col space-y-6 ${mobileView === "inputs" ? "hidden md:block" : ""}`}
+        >
           <PremiumResult
             type={type}
             calculationResult={adjustPremiumForType(premiumMutation.data)}
@@ -127,11 +164,14 @@ export const PremiumCalculator = ({
         </div>
       </div>
       
-      <CalculationMethod
-        parameters={parameters}
-        calculationResult={premiumMutation.data}
-        type={type}
-      />
+      {/* Calculation method - always visible */}
+      <div className={`mt-6 pt-6 ${mobileView === "inputs" ? "hidden md:block" : ""}`}>
+        <CalculationMethod
+          parameters={parameters}
+          calculationResult={premiumMutation.data}
+          type={type}
+        />
+      </div>
     </div>
   );
 };
