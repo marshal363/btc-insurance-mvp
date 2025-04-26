@@ -366,14 +366,15 @@ export const BitcoinPriceCard = ({ isLoading, isError, data }: BitcoinPriceCardP
                   
                   <button 
                     onClick={() => setShowSources(!showSources)}
-                    className="text-blue-600 hover:text-blue-800 text-xs font-medium flex items-center bg-blue-50 px-2 py-1 rounded-md border border-blue-100 transition-colors"
+                    className={`text-xs font-medium flex items-center px-2.5 py-1.5 rounded-md border transition-all duration-200 ${
+                      showSources 
+                        ? "bg-blue-100 text-blue-700 border-blue-200 shadow-inner" 
+                        : "bg-blue-50 text-blue-600 hover:text-blue-800 border-blue-100 hover:bg-blue-100"
+                    }`}
                   >
-                    <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                        d={showSources 
-                          ? "M19 9l-7 7-7-7" 
-                          : "M9 5l7 7-7 7"}
-                      />
+                    <svg className={`h-3.5 w-3.5 mr-1.5 transition-transform duration-200 ${showSources ? 'rotate-180' : ''}`} 
+                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                     {showSources ? "Hide Sources" : "View Sources"}
                   </button>
@@ -403,19 +404,20 @@ export const BitcoinPriceCard = ({ isLoading, isError, data }: BitcoinPriceCardP
               <div className="text-sm text-red-500 mt-3">Data unavailable</div>
             ) : (
               <div className="mt-3">
-                {/* Show low and high before the slider */}
-                <div className="flex justify-between text-xs mb-1.5">
-                  <div className="text-red-600 font-medium">
-                    {formatCurrency(data!.dayLow, "USD")}
+                {/* Trading range values */}
+                <div className="flex justify-between mb-4">
+                  <div>
+                    <div className="font-semibold text-blue-900">{formatCurrency(data!.dayLow, "USD", true)}</div>
+                    <div className="text-xs text-blue-600/70 mt-0.5">24h Low</div>
                   </div>
-                  <div className="text-green-600 font-medium">
-                    {formatCurrency(data!.dayHigh, "USD")}
+                  <div className="text-right">
+                    <div className="font-semibold text-blue-900">{formatCurrency(data!.dayHigh, "USD", true)}</div>
+                    <div className="text-xs text-blue-600/70 mt-0.5">24h High</div>
                   </div>
                 </div>
                 
                 <div className="relative">
-                  <div className="h-2 w-full bg-gradient-to-r from-red-100 via-yellow-100 to-green-100 rounded-full overflow-hidden">
-                    <div className="absolute h-full w-full bg-gradient-to-r from-red-200 to-green-200 opacity-50 rounded-full"></div>
+                  <div className="h-2 w-full bg-gradient-to-r from-red-100 via-yellow-100 to-green-100 rounded-full overflow-hidden">{/* No overlay needed */}
                     <motion.div 
                       className="absolute h-5 w-5 -ml-2.5 bg-white rounded-full top-1/2 -translate-y-1/2 border-2 border-blue-500 shadow-md"
                       style={{left: `${getRangePosition()}%`}}
@@ -456,12 +458,7 @@ export const BitcoinPriceCard = ({ isLoading, isError, data }: BitcoinPriceCardP
                       ></motion.div>
                     )}
                   </div>
-                  
-                  {/* Labels below slider */}
-                  <div className="flex justify-between text-xs mt-1">
-                    <div className="text-blue-600/70">24h Low</div>
-                    <div className="text-blue-600/70">24h High</div>
-                  </div>
+                  {/* No need for additional labels since we have them above */}
                 </div>
               </div>
             )}
@@ -544,97 +541,105 @@ export const BitcoinPriceCard = ({ isLoading, isError, data }: BitcoinPriceCardP
       </div>
       
       {/* Exchange Sources */}
-      {showSources && !isLoading && !isError && data?.exchanges && (
-        <div className="mt-6 pt-6 border-t border-blue-100 animate-in fade-in-50 duration-300">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center">
-              <div className="p-2 rounded-full bg-blue-100 mr-2">
-                <svg className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                </svg>
+      <AnimatePresence>
+        {showSources && !isLoading && !isError && data?.exchanges && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="mt-6 pt-6 border-t border-blue-100 overflow-hidden"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <div className="p-2 rounded-full bg-blue-100 mr-2">
+                  <svg className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-medium text-blue-900">Price Oracle Network</h3>
               </div>
-              <h3 className="text-lg font-medium text-blue-900">Price Oracle Network</h3>
-            </div>
-            <div className="px-3 py-1.5 rounded-full bg-green-50 text-green-600 text-xs font-semibold border border-green-100 shadow-sm flex items-center">
-              <span className="inline-flex h-2 w-2 rounded-full bg-green-500 mr-1.5 animate-pulse"></span>
-              {data.exchanges.length} Connected Sources
-            </div>
-          </div>
-          
-          <div className="bg-gradient-to-br from-white to-blue-50 rounded-xl overflow-hidden border border-blue-100 shadow-sm">
-            <div className="overflow-x-auto">
-              <table className="min-w-full">
-                <thead className="bg-blue-50/80">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
-                      Source
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
-                      Price
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
-                      Updated
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
-                      Confidence
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-blue-100">
-                  {data.exchanges.map((exchange, index) => (
-                    <tr key={index} className="hover:bg-blue-50/50 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-800">
-                        <div className="flex items-center">
-                          <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center mr-2 text-blue-700 font-bold text-xs">
-                            {exchange.name.charAt(0)}
-                          </div>
-                          {exchange.name}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-mono font-semibold text-blue-900">
-                        {formatCurrency(exchange.price, "USD", true)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                        {getLastUpdatedText(exchange.lastUpdated)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="w-full h-2 bg-blue-100 rounded-full overflow-hidden mr-3">
-                            <div 
-                              className={`h-full rounded-full ${
-                                exchange.confidence > 90 ? 'bg-green-500' : 
-                                exchange.confidence > 75 ? 'bg-green-400' : 
-                                exchange.confidence > 60 ? 'bg-yellow-500' : 'bg-yellow-400'
-                              }`}
-                              style={{width: `${exchange.confidence}%`}}
-                            ></div>
-                          </div>
-                          <span className="text-xs font-medium text-blue-800 w-8">{exchange.confidence.toFixed(0)}%</span>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <div className="px-3 py-1.5 rounded-full bg-green-50 text-green-600 text-xs font-semibold border border-green-100 shadow-sm flex items-center">
+                <span className="inline-flex h-2 w-2 rounded-full bg-green-500 mr-1.5 animate-pulse"></span>
+                {data.exchanges.length} Connected Sources
+              </div>
             </div>
             
-            <div className="p-4 bg-blue-50/80 border-t border-blue-100 flex items-start">
-              <svg className="h-5 w-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <p className="text-sm text-blue-700 font-medium mb-1">
-                  Oracle Network Information
-                </p>
-                <p className="text-xs text-blue-600/80 leading-relaxed">
-                  BitHedge aggregates price data from multiple exchanges using a confidence-weighted consensus algorithm.
-                  Higher confidence scores indicate greater reliability and lower latency in the price feed.
-                </p>
+            <div className="bg-gradient-to-br from-white to-blue-50 rounded-xl overflow-hidden border border-blue-100 shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead className="bg-blue-50/80">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
+                        Source
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
+                        Price
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
+                        Updated
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
+                        Confidence
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-blue-100">
+                    {data.exchanges.map((exchange, index) => (
+                      <tr key={index} className="hover:bg-blue-50/50 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-800">
+                          <div className="flex items-center">
+                            <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center mr-2 text-blue-700 font-bold text-xs">
+                              {exchange.name.charAt(0)}
+                            </div>
+                            {exchange.name}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-mono font-semibold text-blue-900">
+                          {formatCurrency(exchange.price, "USD", true)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
+                          {getLastUpdatedText(exchange.lastUpdated)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="w-full h-2 bg-blue-100 rounded-full overflow-hidden mr-3">
+                              <div 
+                                className={`h-full rounded-full ${
+                                  exchange.confidence > 90 ? 'bg-green-500' : 
+                                  exchange.confidence > 75 ? 'bg-green-400' : 
+                                  exchange.confidence > 60 ? 'bg-yellow-500' : 'bg-yellow-400'
+                                }`}
+                                style={{width: `${exchange.confidence}%`}}
+                              ></div>
+                            </div>
+                            <span className="text-xs font-medium text-blue-800 w-8">{exchange.confidence.toFixed(0)}%</span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              
+              <div className="p-4 bg-blue-50/80 border-t border-blue-100 flex items-start">
+                <svg className="h-5 w-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div>
+                  <p className="text-sm text-blue-700 font-medium mb-1">
+                    Oracle Network Information
+                  </p>
+                  <p className="text-xs text-blue-600/80 leading-relaxed">
+                    BitHedge aggregates price data from multiple exchanges using a confidence-weighted consensus algorithm.
+                    Higher confidence scores indicate greater reliability and lower latency in the price feed.
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
