@@ -1,9 +1,10 @@
-// Script to start Next.js application
-import { spawn } from 'child_process';
-import process from 'process';
+// This script is used to run the Next.js application
+// Using CommonJS format to avoid module issues
 
-console.log('Starting Next.js application...');
+console.log("Starting Next.js application...");
 
+// Try to execute the Next.js dev command
+const { spawn } = require('child_process');
 const nextProcess = spawn('npx', ['next', 'dev'], {
   stdio: 'inherit',
   shell: true
