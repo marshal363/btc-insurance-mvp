@@ -190,22 +190,7 @@ export const BitcoinPriceCard = ({ isLoading, isError, data }: BitcoinPriceCardP
           
           <div className="flex items-center space-x-4">
             <div className="flex flex-col items-end">
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-blue-600 font-medium uppercase tracking-wide">Last Updated</span>
-                <button 
-                  onClick={() => setShowSources(!showSources)}
-                  className="inline-flex items-center justify-center text-blue-600 hover:text-blue-800 text-xs font-medium bg-blue-50 px-2 py-1 rounded-md border border-blue-100 transition-colors"
-                >
-                  <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                      d={showSources 
-                        ? "M19 9l-7 7-7-7" 
-                        : "M9 5l7 7-7 7"}
-                    />
-                  </svg>
-                  {showSources ? "Hide Sources" : "View Sources"}
-                </button>
-              </div>
+              <span className="text-xs text-blue-600 font-medium uppercase tracking-wide">Last Updated</span>
               {isLoading ? (
                 <div className="h-5 w-24 bg-blue-100 animate-pulse rounded"></div>
               ) : isError ? (
@@ -355,27 +340,43 @@ export const BitcoinPriceCard = ({ isLoading, isError, data }: BitcoinPriceCardP
                   </div>
                 )}
                 
-                <div className="mt-2 text-xs text-blue-600/70 flex items-center">
-                  <span className="mr-2">Change in the last 24 hours</span>
+                <div className="flex justify-between items-center mt-2">
+                  <div className="text-xs text-blue-600/70 flex items-center">
+                    <span className="mr-2">Change in the last 24 hours</span>
+                    
+                    {/* Pulse dot when new data arrives */}
+                    {priceChanged && (
+                      <motion.span 
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ 
+                          opacity: [0, 1, 0], 
+                          scale: [0.5, 1, 1.5, 1],
+                        }}
+                        transition={{ 
+                          duration: 2,
+                          repeat: 2,
+                          repeatType: "reverse"
+                        }}
+                        className={`inline-block h-2 w-2 rounded-full ${
+                          priceDirection === 'up' ? 'bg-green-500' : 'bg-red-500'
+                        }`}
+                      ></motion.span>
+                    )}
+                  </div>
                   
-                  {/* Pulse dot when new data arrives */}
-                  {priceChanged && (
-                    <motion.span 
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      animate={{ 
-                        opacity: [0, 1, 0], 
-                        scale: [0.5, 1, 1.5, 1],
-                      }}
-                      transition={{ 
-                        duration: 2,
-                        repeat: 2,
-                        repeatType: "reverse"
-                      }}
-                      className={`inline-block h-2 w-2 rounded-full ${
-                        priceDirection === 'up' ? 'bg-green-500' : 'bg-red-500'
-                      }`}
-                    ></motion.span>
-                  )}
+                  <button 
+                    onClick={() => setShowSources(!showSources)}
+                    className="text-blue-600 hover:text-blue-800 text-xs font-medium flex items-center bg-blue-50 px-2 py-1 rounded-md border border-blue-100 transition-colors"
+                  >
+                    <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                        d={showSources 
+                          ? "M19 9l-7 7-7-7" 
+                          : "M9 5l7 7-7 7"}
+                      />
+                    </svg>
+                    {showSources ? "Hide Sources" : "View Sources"}
+                  </button>
                 </div>
               </div>
             )}
