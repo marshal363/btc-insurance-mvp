@@ -25,29 +25,44 @@ export const PremiumCalculator = ({
   isLoading,
   isError
 }: PremiumCalculatorProps) => {
-  // Default parameters
-  const defaultParams: OptionParameters = {
-    currentPrice: bitcoinData?.currentPrice || 0,
-    strikePrice: bitcoinData?.currentPrice || 0,
-    timeToExpiry: 30 / 365, // 30 days in years
-    volatility: bitcoinData?.historicalVolatility || 0,
-    riskFreeRate: 4.5, // Default risk-free rate (%)
-    amount: 0.25 // Default BTC amount
+  // Default parameters with customization based on buyer/seller
+  const getDefaultParameters = (): OptionParameters => {
+    const basePrice = bitcoinData?.currentPrice || 0;
+    
+    // For sellers (who provide liquidity), we use a different default strike price
+    // Typically 5-10% below current price for sellers
+    const adjustedStrikePrice = type === "seller" 
+      ? basePrice * 0.9  // 90% of current price for sellers - more attractive to provide protection
+      : basePrice;       // 100% of current price for buyers - full protection
+      
+    // Default amount is also different - sellers typically provide more capital
+    const defaultAmount = type === "seller" ? 0.5 : 0.25;
+    
+    return {
+      currentPrice: basePrice,
+      strikePrice: adjustedStrikePrice,
+      timeToExpiry: 30 / 365, // 30 days in years
+      volatility: bitcoinData?.historicalVolatility || 0,
+      riskFreeRate: 4.5, // Default risk-free rate (%)
+      amount: defaultAmount // Default BTC amount varies by type
+    };
   };
   
-  const [parameters, setParameters] = useState<OptionParameters>(defaultParams);
+  const [parameters, setParameters] = useState<OptionParameters>(getDefaultParameters());
   
-  // Update parameters when bitcoin data changes
+  // Update parameters when bitcoin data or type changes
   useEffect(() => {
     if (bitcoinData && !isLoading && !isError) {
+      const updatedParams = getDefaultParameters();
       setParameters(prev => ({
         ...prev,
-        currentPrice: bitcoinData.currentPrice,
-        strikePrice: bitcoinData.currentPrice,
-        volatility: bitcoinData.historicalVolatility
+        currentPrice: updatedParams.currentPrice,
+        strikePrice: updatedParams.strikePrice,
+        volatility: updatedParams.volatility,
+        amount: updatedParams.amount
       }));
     }
-  }, [bitcoinData, isLoading, isError]);
+  }, [bitcoinData, isLoading, isError, type]); // Add type to dependencies
   
   // Premium calculation mutation
   const premiumMutation = useMutation({
