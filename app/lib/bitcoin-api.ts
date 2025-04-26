@@ -6,10 +6,11 @@ let priceCache: BitcoinPriceData = {
   lastUpdated: "",
   dayLow: 0,
   dayHigh: 0,
-  historicalVolatility: 0,
   priceChange24h: 0,
   priceChangePercentage24h: 0,
-  exchanges: []
+  historicalVolatility: 0,
+  exchanges: [],
+  period: 30
 };
 
 // Initialize with default data
@@ -100,9 +101,7 @@ async function fetchPriceFromAPIs(): Promise<BitcoinPriceData> {
   const fetchPromises = EXCHANGES.map(async (exchange) => {
     try {
       const response = await fetch(exchange.url, {
-        headers: { 'User-Agent': 'BitHedge Premium Calculator/1.0' },
-        // This is important for Next.js to avoid caching
-        next: { revalidate: 0 }
+        headers: { 'User-Agent': 'BitHedge Premium Calculator/1.0' }
       });
       
       if (!response.ok) {
@@ -173,18 +172,19 @@ async function fetchPriceFromAPIs(): Promise<BitcoinPriceData> {
     priceChangePercentage24h = (priceChange24h / priceCache.currentPrice) * 100;
   }
   
-  // Default volatility value - will be updated from volatility API
-  const historicalVolatility = 50; // Default value in percentage
+  // Estimate volatility if not already in cache
+  const historicalVolatility = priceCache.historicalVolatility || 42.5; // Default value if not yet calculated
   
   const priceData: BitcoinPriceData = {
     currentPrice: finalPrice,
     lastUpdated: timestamp,
     dayLow: lowestPrice,
     dayHigh: highestPrice,
-    historicalVolatility,
     priceChange24h,
     priceChangePercentage24h,
-    exchanges: exchangeResults.sort((a, b) => b.confidence - a.confidence)
+    historicalVolatility,
+    exchanges: exchangeResults.sort((a, b) => b.confidence - a.confidence),
+    period: priceCache.period || 30
   };
   
   // If we have valid data, update cache
@@ -208,9 +208,10 @@ async function fetchPriceFromAPIs(): Promise<BitcoinPriceData> {
     lastUpdated: timestamp,
     dayLow: 93500.75,
     dayHigh: 96125.90,
-    historicalVolatility: 50,
     priceChange24h: 1245.65,
     priceChangePercentage24h: 1.32,
+    historicalVolatility: 42.5,
+    period: 30,
     exchanges: [{
       name: "Fallback",
       price: 95010.28,
@@ -224,8 +225,8 @@ async function fetchPriceFromAPIs(): Promise<BitcoinPriceData> {
  * Get Bitcoin price data, using cache if available
  * This function is used by Next.js API routes
  */
-export async function getBitcoinPriceData(): Promise<BitcoinPriceData> {
-  if (!cacheFilled) {
+export async function getBitcoinPriceData(forceRefresh = false): Promise<BitcoinPriceData> {
+  if (!cacheFilled || forceRefresh) {
     return await fetchPriceFromAPIs();
   }
   

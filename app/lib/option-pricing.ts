@@ -1,4 +1,4 @@
-import { OptionParameters, SimulationPoint } from './types';
+import { OptionParameters, SimulationPoint } from "./types";
 
 /**
  * Standard normal cumulative distribution function
@@ -214,14 +214,14 @@ export function calculateOptionPremium(params: OptionParameters) {
 /**
  * Generate simulation points for payoff visualization
  */
-export function generateSimulationPoints(params: OptionParameters) {
+export function generateSimulationPoints(params: OptionParameters): SimulationPoint[] {
   const { currentPrice, strikePrice, amount } = params;
   
   // Calculate option premium
   const result = calculateOptionPremium(params);
   const premiumPerBTC = result.premium / amount;
   
-  const points = [];
+  const points: SimulationPoint[] = [];
   const minPrice = currentPrice * 0.7; // 70% of current price
   const maxPrice = currentPrice * 1.3; // 130% of current price
   const step = (maxPrice - minPrice) / 30;

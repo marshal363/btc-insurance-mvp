@@ -1,27 +1,36 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { calculateOptionPremium } from '../../../lib/option-pricing';
 import { OptionParameters } from '../../../lib/types';
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    const params: OptionParameters = await request.json();
+    const body = await request.json();
     
-    // Validate required parameters
-    if (!params.currentPrice || !params.strikePrice || 
-        !params.timeToExpiry || !params.volatility || 
-        !params.riskFreeRate || !params.amount) {
-      
-      return NextResponse.json(
-        { error: 'Missing required parameters' },
-        { status: 400 }
-      );
+    // Validate input parameters
+    const requiredFields = ['currentPrice', 'strikePrice', 'timeToExpiry', 'volatility', 'riskFreeRate', 'amount'];
+    for (const field of requiredFields) {
+      if (!(field in body) || body[field] === undefined || body[field] === null) {
+        return NextResponse.json(
+          { error: `Missing required parameter: ${field}` },
+          { status: 400 }
+        );
+      }
     }
     
-    const result = calculateOptionPremium(params);
+    // Type casting to ensure proper parameter types
+    const params: OptionParameters = {
+      currentPrice: Number(body.currentPrice),
+      strikePrice: Number(body.strikePrice),
+      timeToExpiry: Number(body.timeToExpiry),
+      volatility: Number(body.volatility),
+      riskFreeRate: Number(body.riskFreeRate),
+      amount: Number(body.amount)
+    };
     
+    const result = calculateOptionPremium(params);
     return NextResponse.json(result);
   } catch (error) {
-    console.error('Error calculating premium:', error);
+    console.error('Error calculating option premium:', error);
     return NextResponse.json(
       { error: 'Failed to calculate option premium' },
       { status: 500 }
