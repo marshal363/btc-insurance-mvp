@@ -4,7 +4,7 @@ import React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import { Shield, LineChart } from "./ui/icons";
 import { BitcoinPriceData, CalculatorTab } from "../lib/types";
-import { PremiumCalculator } from "../client/src/components/premium-calculator";
+import { PremiumCalculator } from "./premium-calculator";
 
 interface PremiumCalculatorTabsProps {
   activeTab: CalculatorTab;
