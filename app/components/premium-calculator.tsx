@@ -12,6 +12,7 @@ import { usePremiumCalculation } from "../hooks/use-option-premium";
 import { useSimulationPoints } from "../hooks/use-simulation-points";
 import { ParameterInputs } from "./parameter-inputs";
 import { PremiumResult } from "./premium-result";
+import { CalculationMethod } from "./calculation-method";
 
 interface PremiumCalculatorProps {
   type: CalculatorTab;
@@ -125,6 +126,12 @@ export const PremiumCalculator = ({
           />
         </div>
       </div>
+      
+      <CalculationMethod
+        parameters={parameters}
+        calculationResult={premiumMutation.data}
+        type={type}
+      />
     </div>
   );
 };
