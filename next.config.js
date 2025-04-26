@@ -22,6 +22,10 @@ const nextConfig = {
         ],
       },
     ];
+  },
+  // For Replit environment
+  experimental: {
+    // Cross-origin configuration
   }
 };
 
