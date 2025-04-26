@@ -9,6 +9,7 @@ import {
   SimulationPoint,
   CalculatorTab
 } from "../lib/types";
+import { SimulationChart } from "./simulation-chart";
 
 interface PremiumResultProps {
   type: CalculatorTab;
@@ -213,9 +214,11 @@ export const PremiumResult = ({
                 </div>
               </div>
             ) : simulationPoints && simulationPoints.length > 0 ? (
-              <div className="flex items-center justify-center h-full">
-                <p className="text-muted-foreground">Simulation chart will be implemented soon</p>
-              </div>
+              <SimulationChart 
+                data={simulationPoints} 
+                type={type}
+                strikePrice={parameters.strikePrice}
+              />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
                 <div className="text-center">
