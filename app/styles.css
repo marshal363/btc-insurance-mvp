@@ -1,0 +1,87 @@
+/* iOS-inspired UI elements */
+.ios-card {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.ios-button {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.price-display {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #1f2937;
+}
+
+.ios-slider-track {
+  height: 6px;
+  background-color: #e5e7eb;
+  border-radius: 3px;
+  position: relative;
+}
+
+.ios-slider-thumb {
+  width: 18px;
+  height: 18px;
+  background-color: #4f46e5;
+  border: 3px solid white;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Color customization */
+:root {
+  --primary: #4f46e5;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f4f6;
+  --secondary-foreground: #1f2937;
+  --muted: #f3f4f6;
+  --muted-foreground: #6b7280;
+  --accent: #f3f4f6;
+  --accent-foreground: #1f2937;
+  --success: #22c55e;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --background: #ffffff;
+  --foreground: #1f2937;
+  --card: #ffffff;
+}
+
+.bg-success\/10 {
+  background-color: rgba(34, 197, 94, 0.1);
+}
+
+.bg-destructive\/10 {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.text-success {
+  color: var(--success);
+}
+
+.text-destructive {
+  color: var(--destructive);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.bg-primary\/10 {
+  background-color: rgba(79, 70, 229, 0.1);
+}
+
+.text-muted-foreground {
+  color: var(--muted-foreground);
+}

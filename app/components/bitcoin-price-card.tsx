@@ -3,14 +3,14 @@
 import React, { useState } from "react";
 import { BitcoinPriceData } from "../lib/types";
 
-// Mock components - these will be properly implemented in the UI phase
+// UI Components
 const Button = ({ 
   children, 
   onClick, 
   disabled, 
-  size, 
-  variant, 
-  className 
+  size = "default", 
+  variant = "default", 
+  className = "" 
 }: { 
   children: React.ReactNode; 
   onClick?: () => void; 
@@ -18,25 +18,39 @@ const Button = ({
   size?: string; 
   variant?: string; 
   className?: string 
-}) => (
-  <button 
-    onClick={onClick} 
-    disabled={disabled} 
-    className={`px-4 py-2 rounded-full ${className}`}
-  >
-    {children}
-  </button>
-);
+}) => {
+  // Determine the base styles based on the variant
+  let variantStyles = "bg-primary text-white hover:bg-primary/90";
+  if (variant === "outline") {
+    variantStyles = "border border-input bg-background hover:bg-accent hover:text-accent-foreground";
+  }
+  
+  // Determine the size styles
+  let sizeStyles = "h-10 px-4 py-2";
+  if (size === "sm") {
+    sizeStyles = "h-9 px-3 py-1 text-sm";
+  }
+  
+  return (
+    <button 
+      onClick={onClick} 
+      disabled={disabled}
+      className={`inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 disabled:pointer-events-none ${variantStyles} ${sizeStyles} ${className}`}
+    >
+      {children}
+    </button>
+  );
+};
 
 const Skeleton = ({ className }: { className: string }) => (
   <div className={`bg-gray-200 animate-pulse rounded ${className}`}></div>
 );
 
-// Mock toast
+// Mock toast hook
 const useToast = () => {
   return {
     toast: ({ title, description, variant }: { title: string; description: string; variant?: string }) => {
-      console.log(title, description, variant);
+      console.log(`Toast: ${title} - ${description}${variant ? ` (${variant})` : ''}`);
     }
   };
 };

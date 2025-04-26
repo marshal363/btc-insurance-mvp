@@ -1,27 +1,23 @@
-import '../client/src/index.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import React from 'react'
-
-const inter = Inter({ subsets: ['latin'] })
+import React from 'react';
+import type { Metadata } from 'next';
+import '../client/src/index.css';
+import './styles.css';
 
 export const metadata: Metadata = {
-  title: 'BitHedge Premium Calculator',
-  description: 'Calculate Bitcoin PUT option premiums using the Black-Scholes model',
-}
+  title: 'BitHedge - Bitcoin PUT Option Premium Calculator',
+  description: 'Calculate Bitcoin PUT option premiums using the Black-Scholes pricing model',
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="min-h-screen bg-background">
-          {children}
-        </div>
+      <body className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-50">
+        {children}
       </body>
     </html>
-  )
+  );
 }
