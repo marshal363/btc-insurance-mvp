@@ -15,6 +15,7 @@ import {
   ReferenceArea
 } from 'recharts';
 import { SimulationPoint, CalculatorTab } from "../lib/types";
+import { ChartTooltip } from "./chart-tooltip";
 
 interface SimulationChartProps {
   data: SimulationPoint[];
@@ -238,7 +239,7 @@ export const SimulationChart = ({ data, type, strikePrice }: SimulationChartProp
               />
               
               <RechartsTooltip 
-                content={<CustomTooltip />} 
+                content={(props) => <ChartTooltip {...props} data={data} type={type} strikePrice={strikePrice} />}
                 cursor={{ stroke: '#666', strokeWidth: 1, strokeDasharray: '5 5' }}
                 wrapperStyle={{ zIndex: 100 }}
               />

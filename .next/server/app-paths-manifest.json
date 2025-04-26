@@ -1,3 +1,6 @@
 {
+  "/api/bitcoin/price/route": "app/api/bitcoin/price/route.js",
+  "/api/option/premium/route": "app/api/option/premium/route.js",
+  "/api/option/simulation/route": "app/api/option/simulation/route.js",
   "/page": "app/page.js"
 }

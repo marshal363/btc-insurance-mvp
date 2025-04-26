@@ -197,96 +197,240 @@ export const ParameterInputs = ({
       </h3>
       
       {/* Strike Price / Protected Value */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <Label className="text-sm text-muted-foreground">
-            {type === "buyer" ? "Protected Value" : "Obligation Level"}
-          </Label>
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-1.5">
+            <Label className="text-sm font-medium text-blue-600">
+              {type === "buyer" ? "Protected Value" : "Obligation Level"}
+            </Label>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
+                    <HelpCircle className="h-3.5 w-3.5 text-blue-400" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right" align="start" className="max-w-xs">
+                  <p>{type === "buyer" 
+                    ? "The price at which your protection activates. Lower values offer more protection but cost more premium." 
+                    : "The price level where you must fulfill your obligation. Higher values mean less risk but lower premium income."
+                  }</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
           <div className="text-right">
-            <div className="text-lg font-semibold">
+            <div className="text-xl font-semibold text-gray-900 flex items-center justify-end">
               {isLoading ? (
                 <Skeleton className="h-6 w-24" />
               ) : (
-                formatCurrency(parameters.strikePrice)
+                <>
+                  <span>{formatCurrency(parameters.strikePrice)}</span>
+                  <span className={`ml-2 text-xs px-1.5 py-1 rounded ${
+                    type === "buyer"
+                      ? strikePercentage < 85 ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"
+                      : strikePercentage > 90 ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"
+                  }`}>
+                    {type === "buyer"
+                      ? strikePercentage < 85 ? "High Premium" : "Low Premium"
+                      : strikePercentage > 90 ? "Low Income" : "High Income"
+                    }
+                  </span>
+                </>
               )}
             </div>
-            <div className="text-xs text-muted-foreground">
+            <div className="text-xs text-gray-500 mt-1">
               {strikePercentage}% of current price
             </div>
           </div>
         </div>
         
-        <Slider 
-          value={[strikePercentage]}
-          onValueChange={handleStrikePercentageChange}
-          max={100}
-          min={70}
-          step={1}
-          disabled={isLoading || isError}
-          className="mt-2"
-        />
+        <div className="relative mt-4">
+          <Slider 
+            value={[strikePercentage]}
+            onValueChange={handleStrikePercentageChange}
+            max={100}
+            min={70}
+            step={1}
+            disabled={isLoading || isError}
+            className="mt-2"
+          />
+          
+          <div className="flex justify-between text-xs text-gray-500 mt-2">
+            <span>More Protection {type === "buyer" ? "(Higher Cost)" : "(Higher Income)"}</span>
+            <span>Less Protection {type === "buyer" ? "(Lower Cost)" : "(Lower Income)"}</span>
+          </div>
+          
+          <div className={`absolute -top-1 h-6 rounded-full pointer-events-none ${
+            type === "buyer"
+              ? "bg-gradient-to-r from-green-500/20 to-red-500/20"
+              : "bg-gradient-to-r from-red-500/20 to-green-500/20"
+          }`} style={{
+            left: "0%",
+            width: "100%"
+          }}></div>
+        </div>
       </div>
       
       {/* Amount */}
-      <div className="mb-6">
-        <Label className="text-sm text-muted-foreground mb-2 block">
-          {type === "buyer" ? "Protection Amount" : "Capital Commitment"}
-        </Label>
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-1.5">
+            <Label className="text-sm font-medium text-blue-600">
+              {type === "buyer" ? "Protection Amount" : "Capital Commitment"}
+            </Label>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
+                    <HelpCircle className="h-3.5 w-3.5 text-blue-400" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right" align="start" className="max-w-xs">
+                  <p>{type === "buyer" 
+                    ? "The amount of Bitcoin you want to protect. Higher amounts result in higher premiums but more protection." 
+                    : "The amount of Bitcoin you're willing to commit. Higher amounts generate more income but increase potential obligations."
+                  }</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+          
+          <div className="text-right">
+            <div className="text-lg font-semibold text-gray-900">
+              {formatCurrency(calculateUsdValue())}
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              USD Value
+            </div>
+          </div>
+        </div>
         
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <span className="text-primary font-medium">₿</span>
+            <span className="text-blue-600 font-medium">₿</span>
           </div>
           <Input
             type="text"
             value={parameters.amount.toString()}
             onChange={handleAmountChange}
-            className="pl-8 h-12"
+            className="pl-8 h-12 pr-24 border-blue-100 focus:border-blue-300 focus:ring-blue-200"
             disabled={isLoading || isError}
           />
+          <div className="absolute inset-y-0 right-0 flex items-center">
+            <span className="text-xs font-medium text-gray-500 mr-3">BTC</span>
+          </div>
         </div>
         
-        <div className="mt-2 text-xs text-muted-foreground">
-          Value: {formatCurrency(calculateUsdValue())}
-        </div>
-        
-        <div className="flex space-x-2 mt-2">
+        <div className="flex space-x-2 mt-3">
           {[25, 50, 75, 100].map(percent => (
             <Button 
               key={percent}
               variant="outline" 
               size="sm" 
               onClick={() => handleQuickAmount(percent)}
-              className="rounded-full"
+              className={`flex-1 rounded-full border-blue-100 hover:bg-blue-50 hover:text-blue-600 ${
+                parameters.amount === percent/100 ? 'bg-blue-50 text-blue-600 border-blue-200' : 'text-gray-600'
+              }`}
             >
-              {percent}%
+              {percent === 25 && '0.25 BTC'}
+              {percent === 50 && '0.50 BTC'}
+              {percent === 75 && '0.75 BTC'}
+              {percent === 100 && '1.00 BTC'}
             </Button>
           ))}
+        </div>
+        
+        <div className="mt-3 p-2 bg-blue-50 rounded-lg border border-blue-100 text-xs text-blue-600 flex items-start">
+          <svg className="h-4 w-4 mr-1.5 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>
+            {type === "buyer"
+              ? `For each 0.1 BTC protected, you'll pay approximately ${formatCurrency(0.002 * (bitcoinData && 'currentPrice' in bitcoinData ? bitcoinData.currentPrice : 0))} in premium.`
+              : `For each 0.1 BTC committed, you'll earn approximately ${formatCurrency(0.002 * (bitcoinData && 'currentPrice' in bitcoinData ? bitcoinData.currentPrice : 0))} in premium income.`
+            }
+          </span>
         </div>
       </div>
       
       {/* Time Period */}
-      <div className="mb-6">
-        <Label className="text-sm text-muted-foreground mb-2 block">
-          {type === "buyer" ? "Protection Period" : "Income Period"}
-        </Label>
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-1.5">
+            <Label className="text-sm font-medium text-blue-600">
+              {type === "buyer" ? "Protection Period" : "Income Period"}
+            </Label>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
+                    <HelpCircle className="h-3.5 w-3.5 text-blue-400" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right" align="start" className="max-w-xs">
+                  <p>{type === "buyer" 
+                    ? "How long you want protection for. Longer periods result in higher premiums." 
+                    : "How long you're committing capital. Longer periods generate more premium income but extend your obligation."
+                  }</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+          
+          <div className="text-right">
+            <div className="text-sm font-semibold text-gray-900">
+              Expires on: <span className="text-blue-600">{calculateExpiryDate(parameters.timeToExpiry * 365)}</span>
+            </div>
+          </div>
+        </div>
         
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-4 gap-3 mt-2">
           {timePeriods.map((period) => (
             <Button 
               key={period.id}
               variant={selectedPeriod === period.id ? "default" : "outline"}
-              className="h-auto py-2 px-3 flex flex-col items-center"
+              className={`h-auto py-3 px-3 flex flex-col items-center rounded-xl transition-all ${
+                selectedPeriod === period.id 
+                  ? 'bg-blue-600 text-white shadow-md' 
+                  : 'bg-white border-blue-100 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600'
+              }`}
               onClick={() => handlePeriodChange(period.id)}
             >
               <span className="text-lg font-semibold">{period.days}</span>
-              <span className="text-xs">days</span>
+              <span className="text-xs mt-0.5">days</span>
+              {selectedPeriod === period.id && (
+                <div className={`mt-1 px-1.5 py-0.5 rounded text-[10px] bg-white/20 text-white`}>
+                  {period.days <= 90 ? 'Short Term' : period.days <= 180 ? 'Medium Term' : 'Long Term'}
+                </div>
+              )}
             </Button>
           ))}
         </div>
         
-        <div className="mt-2 text-xs text-muted-foreground">
-          Expires on: {calculateExpiryDate(parameters.timeToExpiry * 365)}
+        <div className="grid grid-cols-4 gap-3 mt-2">
+          {timePeriods.map((period) => (
+            <div key={`info-${period.id}`} className={`text-center text-xs ${
+              selectedPeriod === period.id ? 'text-blue-600 font-medium' : 'text-gray-500'
+            }`}>
+              {period.days === 30 && 'Lower Cost'}
+              {period.days === 90 && 'Balanced'}
+              {period.days === 180 && 'Strategic'}
+              {period.days === 360 && 'Maximum Coverage'}
+            </div>
+          ))}
+        </div>
+        
+        <div className="mt-3 p-2 bg-blue-50 rounded-lg border border-blue-100 text-xs text-blue-600 flex items-start">
+          <svg className="h-4 w-4 mr-1.5 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>
+            {type === "buyer"
+              ? `Longer protection periods usually cost more but provide extended downside coverage.`
+              : `Longer commitment periods generally earn more premium but extend your capital lockup period.`
+            }
+          </span>
         </div>
       </div>
       
@@ -294,39 +438,120 @@ export const ParameterInputs = ({
       <Collapsible
         open={isAdvancedOpen}
         onOpenChange={setIsAdvancedOpen}
+        className="mt-6 border-t border-gray-100 pt-4"
       >
         <CollapsibleTrigger asChild>
-          <Button variant="ghost" size="sm" className="w-full flex justify-between mb-2">
-            <span>Advanced Parameters</span>
-            <HelpCircle className="h-4 w-4" />
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="w-full flex justify-between items-center rounded-lg bg-blue-50/50 hover:bg-blue-50 text-blue-700 border border-blue-100 py-2"
+          >
+            <div className="flex items-center">
+              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span className="font-medium">Advanced Parameters</span>
+            </div>
+            <span className="text-xs text-blue-500">
+              {isAdvancedOpen ? "Hide" : "Show"}
+            </span>
           </Button>
         </CollapsibleTrigger>
         
-        <CollapsibleContent className="space-y-4">
+        <CollapsibleContent className="space-y-6 mt-4 px-1 pt-2 pb-2 rounded-lg">
           {/* Volatility */}
           <div>
-            <Label className="text-sm text-muted-foreground mb-2 block">
-              Volatility (%)
-            </Label>
-            <Input
-              type="number"
-              value={parameters.volatility.toString()}
-              onChange={handleVolatilityChange}
-              className="h-12"
-            />
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-1.5">
+                <Label className="text-sm font-medium text-blue-600">
+                  Volatility (%)
+                </Label>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
+                        <HelpCircle className="h-3.5 w-3.5 text-blue-400" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" align="start" className="max-w-xs">
+                      <p>The expected price fluctuation of Bitcoin over the protection period. Higher volatility increases premium costs.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+              <div className="text-sm font-semibold text-gray-900">
+                {parameters.volatility.toFixed(1)}%
+              </div>
+            </div>
+            
+            <div className="relative">
+              <Input
+                type="range"
+                min="10"
+                max="120"
+                step="0.1"
+                value={parameters.volatility.toString()}
+                onChange={handleVolatilityChange}
+                className="h-12 cursor-pointer"
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-2">
+                <span>Low (10%)</span>
+                <span>Typical (60%)</span>
+                <span>High (120%)</span>
+              </div>
+            </div>
+            
+            <div className="mt-2 p-1.5 bg-blue-50 rounded border border-blue-100 text-xs text-blue-600">
+              Bitcoin's historical 30-day volatility: {bitcoinData?.historicalVolatility.toFixed(1) || "Loading..."}%
+            </div>
           </div>
           
           {/* Risk-Free Rate */}
           <div>
-            <Label className="text-sm text-muted-foreground mb-2 block">
-              Risk-Free Rate (%)
-            </Label>
-            <Input
-              type="number"
-              value={parameters.riskFreeRate.toString()}
-              onChange={handleRiskFreeRateChange}
-              className="h-12"
-            />
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-1.5">
+                <Label className="text-sm font-medium text-blue-600">
+                  Risk-Free Rate (%)
+                </Label>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0">
+                        <HelpCircle className="h-3.5 w-3.5 text-blue-400" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" align="start" className="max-w-xs">
+                      <p>The baseline interest rate used in the Black-Scholes model. Typically uses the rate of Treasury bonds matching the option duration.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+              <div className="text-sm font-semibold text-gray-900">
+                {parameters.riskFreeRate.toFixed(2)}%
+              </div>
+            </div>
+            
+            <div className="relative">
+              <Input
+                type="range"
+                min="0"
+                max="10"
+                step="0.01"
+                value={parameters.riskFreeRate.toString()}
+                onChange={handleRiskFreeRateChange}
+                className="h-12 cursor-pointer"
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-2">
+                <span>0%</span>
+                <span>5%</span>
+                <span>10%</span>
+              </div>
+            </div>
+            
+            <div className="mt-2 p-1.5 bg-blue-50 rounded border border-blue-100 text-xs text-blue-600">
+              Current typical rate for {Math.round(parameters.timeToExpiry * 365)}-day US Treasury: 4.5%
+            </div>
           </div>
         </CollapsibleContent>
       </Collapsible>

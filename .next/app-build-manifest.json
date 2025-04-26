@@ -1,3 +1,19 @@
 {
-  "pages": {}
+  "pages": {
+    "/api/bitcoin/price/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/bitcoin/price/route.js"
+    ],
+    "/api/option/premium/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/option/premium/route.js"
+    ],
+    "/api/option/simulation/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/option/simulation/route.js"
+    ]
+  }
 }
