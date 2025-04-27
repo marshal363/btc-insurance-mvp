@@ -32,29 +32,22 @@ export const PremiumCalculator = ({
 }: PremiumCalculatorProps) => {
   // Default parameters with customization based on buyer/seller
   const getDefaultParameters = (): OptionParameters => {
-    // Use a fixed default price initially to avoid hydration errors
-    const basePrice = bitcoinData?.currentPrice || 50000; // Use fixed fallback
-    
-    // Round values to avoid floating point precision issues that might cause hydration errors
-    const roundedBasePrice = Math.round(basePrice * 100) / 100;
+    const basePrice = bitcoinData?.currentPrice || 0;
     
     // For sellers (who provide liquidity), we use a different default strike price
     // Typically 5-10% below current price for sellers
     const adjustedStrikePrice = type === "seller" 
-      ? Math.round(roundedBasePrice * 0.9 * 100) / 100  // 90% of current price for sellers
-      : roundedBasePrice;       // 100% of current price for buyers
+      ? basePrice * 0.9  // 90% of current price for sellers - more attractive to provide protection
+      : basePrice;       // 100% of current price for buyers - full protection
       
     // Default amount is also different - sellers typically provide more capital
     const defaultAmount = type === "seller" ? 0.5 : 0.25;
     
-    // Use a fixed volatility initially to avoid hydration errors
-    const defaultVolatility = bitcoinData?.historicalVolatility || 60;
-    
     return {
-      currentPrice: roundedBasePrice,
+      currentPrice: basePrice,
       strikePrice: adjustedStrikePrice,
       timeToExpiry: 30 / 365, // 30 days in years
-      volatility: defaultVolatility,
+      volatility: bitcoinData?.historicalVolatility || 0,
       riskFreeRate: 4.5, // Default risk-free rate (%)
       amount: defaultAmount // Default BTC amount varies by type
     };
@@ -141,53 +134,11 @@ export const PremiumCalculator = ({
         </div>
       </div>
 
-      {/* Desktop layout */}
-      <div className="hidden md:grid md:grid-cols-12 gap-6">
-        {/* Parameters section - 5 columns on desktop */}
-        <div className="col-span-5 space-y-6">
-          <ParameterInputs
-            type={type}
-            parameters={parameters}
-            onParameterChange={handleParameterChange}
-            bitcoinData={bitcoinData}
-            isLoading={isLoading}
-            isError={isError}
-          />
-        </div>
-        
-        {/* Results section - 7 columns on desktop */}
-        <div className="col-span-7">
-          <div className="grid grid-cols-1 gap-6">
-            {/* Cost card */}
-            <div>
-              <PremiumResult
-                type={type}
-                calculationResult={adjustPremiumForType(premiumMutation.data)}
-                parameters={parameters}
-                simulationPoints={simulationMutation.data}
-                isLoading={isLoading || premiumMutation.isPending}
-                isError={isError || premiumMutation.isError}
-              />
-            </div>
-            
-            {/* Calculation method */}
-            <div>
-              <CalculationMethod
-                parameters={parameters}
-                calculationResult={premiumMutation.data}
-                type={type}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      {/* Mobile layout */}
-      <div className="md:hidden">
-        {/* Mobile tab navigation already exists above */}
-        
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Parameters section - hidden on mobile when results view is active */}
-        <div className={`space-y-6 ${mobileView === "results" ? "hidden" : ""}`}>
+        <div 
+          className={`col-span-2 space-y-6 ${mobileView === "results" ? "hidden md:block" : ""}`}
+        >
           <ParameterInputs
             type={type}
             parameters={parameters}
@@ -199,7 +150,9 @@ export const PremiumCalculator = ({
         </div>
         
         {/* Results section - hidden on mobile when inputs view is active */}
-        <div className={`space-y-6 ${mobileView === "inputs" ? "hidden" : ""}`}>
+        <div 
+          className={`flex flex-col space-y-6 ${mobileView === "inputs" ? "hidden md:block" : ""}`}
+        >
           <PremiumResult
             type={type}
             calculationResult={adjustPremiumForType(premiumMutation.data)}
@@ -208,13 +161,16 @@ export const PremiumCalculator = ({
             isLoading={isLoading || premiumMutation.isPending}
             isError={isError || premiumMutation.isError}
           />
-          
-          <CalculationMethod
-            parameters={parameters}
-            calculationResult={premiumMutation.data}
-            type={type}
-          />
         </div>
+      </div>
+      
+      {/* Calculation method - always visible */}
+      <div className={`mt-6 pt-6 ${mobileView === "inputs" ? "hidden md:block" : ""}`}>
+        <CalculationMethod
+          parameters={parameters}
+          calculationResult={premiumMutation.data}
+          type={type}
+        />
       </div>
     </div>
   );

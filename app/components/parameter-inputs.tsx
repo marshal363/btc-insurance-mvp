@@ -172,18 +172,16 @@ export const ParameterInputs = ({
     return formatter.format(percent / 100);
   };
 
-  // Calculate expiry date with fixed format to avoid hydration errors
+  // Calculate expiry date
   const calculateExpiryDate = (days: number): string => {
     const expiryDate = new Date();
     expiryDate.setDate(expiryDate.getDate() + days);
     
-    // Use fixed date format to avoid hydration issues
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const month = monthNames[expiryDate.getMonth()];
-    const day = expiryDate.getDate();
-    const year = expiryDate.getFullYear();
-    
-    return `${month} ${day}, ${year}`;
+    return expiryDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
   };
 
   // Calculate strike price from percentage
@@ -263,15 +261,13 @@ export const ParameterInputs = ({
             <span>Less Protection {type === "buyer" ? "(Lower Cost)" : "(Lower Income)"}</span>
           </div>
           
-          {/* Gradient background for slider - positioned below the slider */}
-          <div className={`absolute top-2 h-2 rounded-full pointer-events-none ${
+          <div className={`absolute -top-1 h-6 rounded-full pointer-events-none ${
             type === "buyer"
               ? "bg-gradient-to-r from-green-500/20 to-red-500/20"
               : "bg-gradient-to-r from-red-500/20 to-green-500/20"
           }`} style={{
             left: "0%",
-            width: "100%",
-            zIndex: "-1"
+            width: "100%"
           }}></div>
         </div>
       </div>
