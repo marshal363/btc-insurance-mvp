@@ -541,82 +541,75 @@ export const BitcoinPriceCard = ({ isLoading, isError, data }: BitcoinPriceCardP
       </div>
       
       {/* Exchange Sources */}
-      <AnimatePresence>
-        {showSources && !isLoading && !isError && data?.exchanges && (
-          <motion.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="mt-6 pt-6 border-t border-blue-100 overflow-hidden"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <div className="p-2 rounded-full bg-blue-100 mr-2">
-                  <svg className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-medium text-blue-900">Price Oracle Network</h3>
+      {showSources && !isLoading && !isError && data?.exchanges && (
+        <div className="mt-6 pt-6 border-t border-blue-100 animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center">
+              <div className="p-2 rounded-full bg-blue-100 mr-2">
+                <svg className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
               </div>
-              <div className="px-3 py-1.5 rounded-full bg-green-50 text-green-600 text-xs font-semibold border border-green-100 shadow-sm flex items-center">
-                <span className="inline-flex h-2 w-2 rounded-full bg-green-500 mr-1.5 animate-pulse"></span>
-                {data.exchanges.length} Connected Sources
-              </div>
+              <h3 className="text-lg font-medium text-blue-900">Price Oracle Network</h3>
             </div>
-            
-            <div className="bg-gradient-to-br from-white to-blue-50 rounded-xl overflow-hidden border border-blue-100 shadow-sm">
-              <div className="overflow-x-auto">
-                <table className="min-w-full">
-                  <thead className="bg-blue-50/80">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
-                        Source
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
-                        Price
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
-                        Updated
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
-                        Confidence
-                      </th>
+            <div className="px-3 py-1.5 rounded-full bg-green-50 text-green-600 text-xs font-semibold border border-green-100 shadow-sm flex items-center">
+              <span className="inline-flex h-2 w-2 rounded-full bg-green-500 mr-1.5 animate-pulse"></span>
+              {data.exchanges.length} Connected Sources
+            </div>
+          </div>
+          
+          <div className="bg-gradient-to-br from-white to-blue-50 rounded-xl overflow-hidden border border-blue-100 shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead className="bg-blue-50/80">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
+                      Source
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
+                      Price
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
+                      Updated
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider">
+                      Confidence
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-blue-100">
+                  {data.exchanges.map((exchange, index) => (
+                    <tr key={index} className="hover:bg-blue-50/50 transition-colors">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-800">
+                        <div className="flex items-center">
+                          <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center mr-2 text-blue-700 font-bold text-xs">
+                            {exchange.name.charAt(0)}
+                          </div>
+                          {exchange.name}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-mono font-semibold text-blue-900">
+                        {formatCurrency(exchange.price, "USD", true)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
+                        {getLastUpdatedText(exchange.lastUpdated)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="w-full h-2 bg-blue-100 rounded-full overflow-hidden mr-3">
+                            <div 
+                              className={`h-full rounded-full ${
+                                exchange.confidence > 90 ? 'bg-green-500' : 
+                                exchange.confidence > 75 ? 'bg-green-400' : 
+                                exchange.confidence > 60 ? 'bg-yellow-500' : 'bg-yellow-400'
+                              }`}
+                              style={{width: `${exchange.confidence}%`}}
+                            ></div>
+                          </div>
+                          <span className="text-xs font-medium text-blue-800 w-8">{exchange.confidence.toFixed(0)}%</span>
+                        </div>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-blue-100">
-                    {data.exchanges.map((exchange, index) => (
-                      <tr key={index} className="hover:bg-blue-50/50 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-800">
-                          <div className="flex items-center">
-                            <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center mr-2 text-blue-700 font-bold text-xs">
-                              {exchange.name.charAt(0)}
-                            </div>
-                            {exchange.name}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-mono font-semibold text-blue-900">
-                          {formatCurrency(exchange.price, "USD", true)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                          {getLastUpdatedText(exchange.lastUpdated)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="w-full h-2 bg-blue-100 rounded-full overflow-hidden mr-3">
-                              <div 
-                                className={`h-full rounded-full ${
-                                  exchange.confidence > 90 ? 'bg-green-500' : 
-                                  exchange.confidence > 75 ? 'bg-green-400' : 
-                                  exchange.confidence > 60 ? 'bg-yellow-500' : 'bg-yellow-400'
-                                }`}
-                                style={{width: `${exchange.confidence}%`}}
-                              ></div>
-                            </div>
-                            <span className="text-xs font-medium text-blue-800 w-8">{exchange.confidence.toFixed(0)}%</span>
-                          </div>
-                        </td>
-                      </tr>
                     ))}
                   </tbody>
                 </table>
@@ -637,9 +630,8 @@ export const BitcoinPriceCard = ({ isLoading, isError, data }: BitcoinPriceCardP
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
     </div>
   );
 };
