@@ -69,8 +69,8 @@ export const PremiumResult = ({
   
   return (
     <div className="space-y-6">
-      {/* Premium Estimate Card */}
-      <div className="overflow-hidden bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-xl shadow-lg border border-blue-400/20 relative">
+      {/* Premium Estimate Card - Using blue background to match mockup */}
+      <div className="overflow-hidden text-white rounded-xl relative">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDIwIDAgTCAwIDAgMCAyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLW9wYWNpdHk9IjAuMDUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgZmlsbD0idXJsKCNncmlkKSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIvPjwvc3ZnPg==')]"></div>
         <div className="relative p-6">
           <div className="flex justify-between items-center mb-4">
