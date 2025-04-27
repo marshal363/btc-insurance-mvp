@@ -53,7 +53,7 @@ function HomeContent() {
       />
       
       <footer className="mt-12 pt-6 border-t border-gray-200 text-center text-gray-500 text-sm">
-        <p>© 2025 BitHedge • Price data refreshed every 30 seconds • Not financial advice</p>
+        <p>© {new Date().getFullYear()} BitHedge • Price data refreshed every 30 seconds • Not financial advice</p>
       </footer>
     </main>
   );
