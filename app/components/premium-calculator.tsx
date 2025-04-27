@@ -134,11 +134,53 @@ export const PremiumCalculator = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Desktop layout */}
+      <div className="hidden md:grid md:grid-cols-12 gap-6">
+        {/* Parameters section - 5 columns on desktop */}
+        <div className="col-span-5 space-y-6">
+          <ParameterInputs
+            type={type}
+            parameters={parameters}
+            onParameterChange={handleParameterChange}
+            bitcoinData={bitcoinData}
+            isLoading={isLoading}
+            isError={isError}
+          />
+        </div>
+        
+        {/* Results section - 7 columns on desktop */}
+        <div className="col-span-7">
+          <div className="grid grid-cols-1 gap-6">
+            {/* Cost card */}
+            <div>
+              <PremiumResult
+                type={type}
+                calculationResult={adjustPremiumForType(premiumMutation.data)}
+                parameters={parameters}
+                simulationPoints={simulationMutation.data}
+                isLoading={isLoading || premiumMutation.isPending}
+                isError={isError || premiumMutation.isError}
+              />
+            </div>
+            
+            {/* Calculation method */}
+            <div>
+              <CalculationMethod
+                parameters={parameters}
+                calculationResult={premiumMutation.data}
+                type={type}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Mobile layout */}
+      <div className="md:hidden">
+        {/* Mobile tab navigation already exists above */}
+        
         {/* Parameters section - hidden on mobile when results view is active */}
-        <div 
-          className={`col-span-2 space-y-6 ${mobileView === "results" ? "hidden md:block" : ""}`}
-        >
+        <div className={`space-y-6 ${mobileView === "results" ? "hidden" : ""}`}>
           <ParameterInputs
             type={type}
             parameters={parameters}
@@ -150,9 +192,7 @@ export const PremiumCalculator = ({
         </div>
         
         {/* Results section - hidden on mobile when inputs view is active */}
-        <div 
-          className={`flex flex-col space-y-6 ${mobileView === "inputs" ? "hidden md:block" : ""}`}
-        >
+        <div className={`space-y-6 ${mobileView === "inputs" ? "hidden" : ""}`}>
           <PremiumResult
             type={type}
             calculationResult={adjustPremiumForType(premiumMutation.data)}
@@ -161,16 +201,13 @@ export const PremiumCalculator = ({
             isLoading={isLoading || premiumMutation.isPending}
             isError={isError || premiumMutation.isError}
           />
+          
+          <CalculationMethod
+            parameters={parameters}
+            calculationResult={premiumMutation.data}
+            type={type}
+          />
         </div>
-      </div>
-      
-      {/* Calculation method - always visible */}
-      <div className={`mt-6 pt-6 ${mobileView === "inputs" ? "hidden md:block" : ""}`}>
-        <CalculationMethod
-          parameters={parameters}
-          calculationResult={premiumMutation.data}
-          type={type}
-        />
       </div>
     </div>
   );

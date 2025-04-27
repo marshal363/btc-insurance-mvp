@@ -172,16 +172,18 @@ export const ParameterInputs = ({
     return formatter.format(percent / 100);
   };
 
-  // Calculate expiry date
+  // Calculate expiry date with fixed format to avoid hydration errors
   const calculateExpiryDate = (days: number): string => {
     const expiryDate = new Date();
     expiryDate.setDate(expiryDate.getDate() + days);
     
-    return expiryDate.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+    // Use fixed date format to avoid hydration issues
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const month = monthNames[expiryDate.getMonth()];
+    const day = expiryDate.getDate();
+    const year = expiryDate.getFullYear();
+    
+    return `${month} ${day}, ${year}`;
   };
 
   // Calculate strike price from percentage
@@ -261,7 +263,7 @@ export const ParameterInputs = ({
             <span>Less Protection {type === "buyer" ? "(Lower Cost)" : "(Lower Income)"}</span>
           </div>
           
-          <div className={`absolute -top-1 h-6 rounded-full pointer-events-none ${
+          <div className={`absolute top-2 h-2 rounded-full pointer-events-none z-0 ${
             type === "buyer"
               ? "bg-gradient-to-r from-green-500/20 to-red-500/20"
               : "bg-gradient-to-r from-red-500/20 to-green-500/20"

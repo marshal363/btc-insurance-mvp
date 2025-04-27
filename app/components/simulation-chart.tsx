@@ -197,10 +197,10 @@ export const SimulationChart = ({ data, type, strikePrice }: SimulationChartProp
   const breakEvenPrice = breakEvenIndex > 0 ? chartData[breakEvenIndex].price : null;
   
   return (
-    <div className="h-full w-full relative">
+    <div className="h-[300px] w-full relative">
       {chartData.length > 0 ? (
         <>
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height={300}>
             <AreaChart
               data={chartData}
               margin={{ top: 20, right: 5, left: 5, bottom: 30 }}

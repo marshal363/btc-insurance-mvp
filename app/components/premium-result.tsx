@@ -243,7 +243,7 @@ export const PremiumResult = ({
           </div>
           
           <div className="relative bg-gradient-to-br from-gray-50 to-blue-50/30 rounded-xl overflow-hidden">
-            <div className="h-[250px]">
+            <div className="h-[300px]">
               {isLoading ? (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <Skeleton className="h-full w-full" />
@@ -285,64 +285,64 @@ export const PremiumResult = ({
             </div>
           </div>
           
-          <div className="mt-4 grid grid-cols-3 gap-4">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-3 border border-blue-100 shadow-sm">
-              <div className="flex items-center text-xs text-blue-700 mb-1 font-medium">
-                <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="mt-4 grid sm:grid-cols-3 gap-4">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-100 shadow-sm">
+              <div className="flex items-center text-xs text-blue-700 mb-1.5 font-medium">
+                <svg className="h-3.5 w-3.5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
                 {type === "buyer" ? "Protection Trigger" : "Obligation Level"}
               </div>
               {isLoading ? (
-                <Skeleton className="h-5 w-full" />
+                <Skeleton className="h-6 w-full" />
               ) : (
-                <div className="font-semibold text-blue-800">
+                <div className="font-semibold text-blue-800 text-lg">
                   {formatCurrency(parameters.strikePrice, "USD", true)}
                 </div>
               )}
-              <div className="text-xs text-blue-600/70 mt-1">
+              <div className="text-xs text-blue-600/80 mt-1.5">
                 {parameters.strikePrice > 0 && (
                   <>{(parameters.strikePrice / parameters.currentPrice * 100).toFixed(0)}% of current price</>
                 )}
               </div>
             </div>
             
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-3 border border-blue-100 shadow-sm">
-              <div className="flex items-center text-xs text-blue-700 mb-1 font-medium">
-                <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-100 shadow-sm">
+              <div className="flex items-center text-xs text-blue-700 mb-1.5 font-medium">
+                <svg className="h-3.5 w-3.5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
                 {type === "buyer" ? "Max Recovery" : "Max Obligation"}
               </div>
               {isLoading ? (
-                <Skeleton className="h-5 w-full" />
+                <Skeleton className="h-6 w-full" />
               ) : (
-                <div className="font-semibold text-blue-800">
+                <div className="font-semibold text-blue-800 text-lg">
                   {formatCurrency(maxRecovery, "USD", true)}
                 </div>
               )}
-              <div className="text-xs text-blue-600/70 mt-1">
+              <div className="text-xs text-blue-600/80 mt-1.5">
                 For {parameters.amount} BTC @ {formatCurrency(parameters.strikePrice)}
               </div>
             </div>
             
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-3 border border-blue-100 shadow-sm">
-              <div className="flex items-center text-xs text-blue-700 mb-1 font-medium">
-                <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-100 shadow-sm">
+              <div className="flex items-center text-xs text-blue-700 mb-1.5 font-medium">
+                <svg className="h-3.5 w-3.5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 {type === "buyer" ? "Break-even" : "Profit Threshold"}
               </div>
               {isLoading ? (
-                <Skeleton className="h-5 w-full" />
+                <Skeleton className="h-6 w-full" />
               ) : isError || !calculationResult ? (
                 <div className="font-medium">--</div>
               ) : (
-                <div className="font-semibold text-blue-800">
+                <div className="font-semibold text-blue-800 text-lg">
                   {formatCurrency(calculationResult.breakEvenPrice, "USD", true)}
                 </div>
               )}
-              <div className="text-xs text-blue-600/70 mt-1">
+              <div className="text-xs text-blue-600/80 mt-1.5">
                 {calculationResult && (
                   <>{(calculationResult.breakEvenPrice / parameters.currentPrice * 100).toFixed(0)}% of current price</>
                 )}
@@ -350,16 +350,16 @@ export const PremiumResult = ({
             </div>
           </div>
           
-          <div className="mt-4 bg-gradient-to-r from-blue-50 to-blue-100/50 rounded-xl p-3 border border-blue-100 shadow-sm">
-            <div className="flex">
-              <div className="flex-1">
-                <div className="flex items-center text-xs text-blue-700 mb-1 font-medium">
-                  <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="mt-4 bg-gradient-to-r from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-100 shadow-sm">
+            <div className="flex flex-col sm:flex-row">
+              <div className="flex-1 mb-4 sm:mb-0">
+                <div className="flex items-center text-xs text-blue-700 mb-1.5 font-medium">
+                  <svg className="h-3.5 w-3.5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   {type === "buyer" ? "What happens if Bitcoin drops?" : "What happens if Bitcoin drops?"}
                 </div>
-                <div className="text-xs text-blue-600/90 mt-1 leading-relaxed">
+                <div className="text-xs text-blue-600/90 mt-1.5 leading-relaxed">
                   {type === "buyer" 
                     ? "If Bitcoin drops below your protection level, you'll be compensated for the difference, offsetting your losses."
                     : "If Bitcoin drops below the obligation level, you'll need to provide liquidity at the agreed price, even if market price is lower."
@@ -367,14 +367,14 @@ export const PremiumResult = ({
                 </div>
               </div>
               
-              <div className="flex-1 pl-4 border-l border-blue-200">
-                <div className="flex items-center text-xs text-blue-700 mb-1 font-medium">
-                  <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="flex-1 sm:pl-4 sm:border-l sm:border-blue-200">
+                <div className="flex items-center text-xs text-blue-700 mb-1.5 font-medium">
+                  <svg className="h-3.5 w-3.5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   What if it rises?
                 </div>
-                <div className="text-xs text-blue-600/90 mt-1 leading-relaxed">
+                <div className="text-xs text-blue-600/90 mt-1.5 leading-relaxed">
                   {type === "buyer" 
                     ? "If Bitcoin rises, you'll benefit from the upside while having paid a small premium for peace of mind."
                     : "If Bitcoin rises above your obligation level, you keep the premium with no further obligation."
