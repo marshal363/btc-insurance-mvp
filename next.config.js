@@ -24,9 +24,8 @@ const nextConfig = {
     ];
   },
   // For Replit environment
-  experimental: {
-    // Cross-origin configuration
-  }
+  distDir: '.next',
+  poweredByHeader: false
 };
 
 export default nextConfig;
