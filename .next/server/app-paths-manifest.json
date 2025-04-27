@@ -1,7 +1,1 @@
-{
-  "/api/option/premium/route": "app/api/option/premium/route.js",
-  "/api/option/simulation/route": "app/api/option/simulation/route.js",
-  "/api/bitcoin/volatility/route": "app/api/bitcoin/volatility/route.js",
-  "/api/bitcoin/price/route": "app/api/bitcoin/price/route.js",
-  "/page": "app/page.js"
-}
+{}
