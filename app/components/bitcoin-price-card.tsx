@@ -385,11 +385,12 @@ export const BitcoinPriceCard = ({ isLoading, isError, data }: BitcoinPriceCardP
         </div>
 
         {/* 24h Range */}
-        <div className="bg-gradient-to-br from-white to-blue-50 rounded-xl border border-blue-100 shadow-sm p-5 relative overflow-hidden">
-          <div className="absolute -bottom-6 -right-6 w-12 h-12 bg-blue-100 rounded-full opacity-50"></div>
+        <div className="bg-gradient-to-br from-white to-blue-50 rounded-xl border border-blue-100 shadow-sm p-5 relative overflow-hidden group hover:shadow-md transition-shadow">
+          <div className="absolute -bottom-6 -right-6 w-12 h-12 bg-blue-100 rounded-full opacity-50 group-hover:opacity-70 transition-opacity"></div>
+          <div className="absolute -top-8 -left-8 w-16 h-16 bg-blue-50 rounded-full opacity-40"></div>
           
           <div className="relative">
-            <div className="flex items-center">
+            <div className="flex items-center mb-2">
               <div className="p-1.5 rounded-full bg-blue-100 mr-2">
                 <svg className="h-3.5 w-3.5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
@@ -403,23 +404,31 @@ export const BitcoinPriceCard = ({ isLoading, isError, data }: BitcoinPriceCardP
             ) : isError ? (
               <div className="text-sm text-red-500 mt-3">Data unavailable</div>
             ) : (
-              <div className="mt-3">
+              <div className="mt-4">
                 {/* Trading range values */}
-                <div className="flex justify-between mb-4">
-                  <div>
-                    <div className="font-semibold text-blue-900">{formatCurrency(data!.dayLow, "USD", true)}</div>
-                    <div className="text-xs text-blue-600/70 mt-0.5">24h Low</div>
+                <div className="flex justify-between mb-3">
+                  <div className="text-center flex-1">
+                    <div className="font-bold text-blue-900 text-lg">{formatCurrency(data!.dayLow, "USD", true)}</div>
+                    <div className="text-xs text-blue-600/70 mt-0.5 font-medium">24h Low</div>
                   </div>
-                  <div className="text-right">
-                    <div className="font-semibold text-blue-900">{formatCurrency(data!.dayHigh, "USD", true)}</div>
-                    <div className="text-xs text-blue-600/70 mt-0.5">24h High</div>
+                  <div className="text-center flex-1">
+                    <div className="font-bold text-blue-900 text-lg">{formatCurrency(data!.dayHigh, "USD", true)}</div>
+                    <div className="text-xs text-blue-600/70 mt-0.5 font-medium">24h High</div>
                   </div>
                 </div>
                 
-                <div className="relative">
-                  <div className="h-2 w-full bg-gradient-to-r from-red-100 via-yellow-100 to-green-100 rounded-full overflow-hidden">{/* No overlay needed */}
+                <div className="relative mb-2 mt-4">
+                  {/* Current price indicator label */}
+                  <div className="flex justify-between items-center mb-1.5">
+                    <div className="text-xs font-medium text-blue-600">Current Price Position</div>
+                    <div className="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                      {formatCurrency(data!.currentPrice, "USD", true)}
+                    </div>
+                  </div>
+                  
+                  <div className="h-3 w-full bg-gradient-to-r from-red-100 via-yellow-100 to-green-100 rounded-full overflow-hidden shadow-inner">{/* Increased height for better visibility */}
                     <motion.div 
-                      className="absolute h-5 w-5 -ml-2.5 bg-white rounded-full top-1/2 -translate-y-1/2 border-2 border-blue-500 shadow-md"
+                      className="absolute h-6 w-6 -ml-3 bg-white rounded-full top-1/2 -translate-y-1/2 border-2 border-blue-500 shadow-md"
                       style={{left: `${getRangePosition()}%`}}
                       initial={{ scale: 0.8, opacity: 0.5 }}
                       animate={{ 
