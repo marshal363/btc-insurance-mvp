@@ -35,16 +35,19 @@ export const PremiumResult = ({
 
   const maxRecovery = calculateProtectedValue(parameters.strikePrice, parameters.amount);
 
-  // Format helpers
+  // Format helpers with consistent output for server/client rendering
   const formatCurrency = (amount: number, currency: string = "USD", ios: boolean = false): string => {
-    const formatter = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
+    // Use a more predictable formatting approach to avoid hydration issues
+    const value = Math.abs(amount);
+    const sign = amount < 0 ? '-' : '';
     
-    return formatter.format(amount);
+    // Round to 2 decimal places and format with commas
+    const parts = value.toFixed(2).toString().split('.');
+    const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const decimalPart = parts[1];
+    
+    const symbol = currency === "USD" ? "$" : currency;
+    return `${sign}${symbol}${integerPart}.${decimalPart}`;
   };
 
   const formatBTC = (amount: number): string => {
@@ -58,13 +61,10 @@ export const PremiumResult = ({
   };
 
   const formatPercentage = (percent: number, minimumFractionDigits: number = 2): string => {
-    const formatter = new Intl.NumberFormat('en-US', {
-      style: 'percent',
-      minimumFractionDigits,
-      maximumFractionDigits: minimumFractionDigits,
-    });
-    
-    return formatter.format(percent / 100);
+    // Calculate percentage with fixed precision to avoid floating point differences
+    const value = percent / 100;
+    const formatted = value.toFixed(minimumFractionDigits);
+    return `${formatted}%`;
   };
   
   return (

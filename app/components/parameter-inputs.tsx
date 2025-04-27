@@ -263,13 +263,15 @@ export const ParameterInputs = ({
             <span>Less Protection {type === "buyer" ? "(Lower Cost)" : "(Lower Income)"}</span>
           </div>
           
-          <div className={`absolute top-2 h-2 rounded-full pointer-events-none z-0 ${
+          {/* Gradient background for slider - positioned below the slider */}
+          <div className={`absolute top-2 h-2 rounded-full pointer-events-none ${
             type === "buyer"
               ? "bg-gradient-to-r from-green-500/20 to-red-500/20"
               : "bg-gradient-to-r from-red-500/20 to-green-500/20"
           }`} style={{
             left: "0%",
-            width: "100%"
+            width: "100%",
+            zIndex: "-1"
           }}></div>
         </div>
       </div>
